@@ -1,13 +1,22 @@
+module ProjectEuler003
+  ( sqrt'
+  , isPrime
+  , lastFactor
+  , run
+  ) where
+
 sqrt' :: (Integral a) => a -> a
 sqrt' n = floor $ sqrt $ fromIntegral n
 
 isPrime :: (Integral a) => a -> Bool
 isPrime 1 = False
-isPrime n = null [() | x <- [2..sqrt' n], mod n x == 0]
+isPrime n = null [() | x <- [2 .. sqrt' n], mod n x == 0]
 
-lastFactor n = 
-    let last = sqrt' n
-        factors = [x | x <- [last,last-1..2], mod n x == 0 && isPrime x]
-     in head factors
+lastFactor :: Integral a => a -> a
+lastFactor n =
+  let lastChecked = sqrt' n
+      factors =
+        [x | x <- [lastChecked,lastChecked - 1 .. 2], mod n x == 0 && isPrime x]
+   in head factors
 
-main = print $ lastFactor 600851475143
+run = print $ lastFactor 600851475143
