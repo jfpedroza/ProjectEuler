@@ -16,7 +16,13 @@ lastFactor :: Integral a => a -> a
 lastFactor n =
   let lastChecked = sqrt' n
       factors =
-        [x | x <- [lastChecked,lastChecked - 1 .. 2], mod n x == 0 && isPrime x]
-   in head factors
+        [ y
+        | x <- [lastChecked,lastChecked - 1 .. 2]
+        , mod n x == 0
+        , y <- [x, n `div` x]
+        , isPrime y
+        ]
+   in maximum factors
 
+run :: IO ()
 run = print $ lastFactor 600851475143

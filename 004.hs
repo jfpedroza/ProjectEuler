@@ -1,14 +1,25 @@
+{-# LANGUAGE TupleSections #-}
+
 module ProjectEuler004
-  (
+  ( palindrome
+  , largestPalindrome
+  , run
   ) where
+
+import Data.List
 
 palindrome :: Show a => a -> Bool
 palindrome x = y == reverse y
   where
     y = show x
 
-twoDigits = [99,98 .. 1]
+largestPalindrome :: Int -> Int
+largestPalindrome m = uncurry (*) $ head filteredMatrix
+  where
+    digits = [m,m - 1 .. 1]
+    matrix = digits >>= (\a -> map (a, ) digits)
+    sortedMatrix = sortOn (\(a, b) -> -a - b) matrix
+    filteredMatrix = filter (\(a, b) -> palindrome (a * b)) sortedMatrix
 
-largesest m = head [x | x <- [m,m - 1 .. 2], palindrome x]
-
-main004 = print $ largesest 1000
+run :: IO ()
+run = print $ largestPalindrome 999
