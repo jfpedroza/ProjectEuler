@@ -3,6 +3,7 @@
 module ProjectEuler004
   ( palindrome
   , largestPalindrome
+  , largestPalindrome'
   , run
   ) where
 
@@ -13,13 +14,17 @@ palindrome x = y == reverse y
   where
     y = show x
 
-largestPalindrome :: Int -> Int
-largestPalindrome m = uncurry (*) $ head filteredMatrix
+largestPalindrome :: [Int] -> Int
+largestPalindrome range = uncurry (*) $ head filteredMatrix
   where
-    digits = [m,m - 1 .. 1]
-    matrix = digits >>= (\a -> map (a, ) digits)
+    m = last range
+    matrix = range >>= (\a -> map (a, ) [a .. m])
     sortedMatrix = sortOn (\(a, b) -> -a - b) matrix
     filteredMatrix = filter (\(a, b) -> palindrome (a * b)) sortedMatrix
 
+largestPalindrome' :: [Int] -> Int
+largestPalindrome' range =
+  maximum $ filter palindrome [a * b | a <- range, b <- [a .. last range]]
+
 run :: IO ()
-run = print $ largestPalindrome 999
+run = print $ largestPalindrome [100 .. 999]
